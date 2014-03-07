@@ -13,7 +13,6 @@ namespace igr {
   {
       GLuint handle;
 
-
       gl_obj () : handle{} 
       {
         func_create(1, &handle);

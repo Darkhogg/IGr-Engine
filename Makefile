@@ -7,30 +7,39 @@
 # or implied, including, without limitation, the warranties of
 # merchantability and of fitness for any purpose. The user must assume the
 # entire risk of using the Software.
-
 CC     = g++ -std=c++11
+
+CCACHE_EXISTS := $(shell ccache -V)
+ifdef CCACHE_EXISTS
+  CC := ccache $(CC)
+endif
+
 #CC     = gfilt /cand:L -m32
 CP     = cp
 RM     = rm -rf
 KILL   = killall -9
 SHELL  = /bin/bash
-MAKE   = make
+MAKE   = make --no-print-directory
 TIME   = time
+JOBS   = $(shell nproc)
 
 IFLAGS    =
 LFLAGS    =
 DEBUG     = -ggdb
-OPTIMIZE  =
-ERROR     = -Wconversion -Werror
+OPTIMIZE  = -O3 -funroll-loops
+#ERROR     = -Wconversion -Werror
 CFLAGS    = $(OPTIMIZE) -Wall -c $(DEBUG) $(ERROR) $(IFLAGS)
 LDFLAGS   = $(OPTIMIZE) $(DEBUG) $(ERROR) $(LFLAGS)
 
-#TARGET = boiler
+TARGET = engine
 ARGS   =
 
 # Additional linker libraries
 LIBS = $(LIBFLAGS)
-FRAMEWORKS = -framework OpenGL -framework sfml -framework sfml-window -framework sfml-graphics -framework sfml-system
+FRAMEWORKS = -lGL -lGLU -lsfml-window -lsfml-graphics -lsfml-system
+
+# Modify makeflags
+MAKEFLAGS+=-j$(JOBS)
 
 # -------------------------------------------------------------
 
@@ -40,7 +49,9 @@ SRCS = $(wildcard ./*.cpp ./*/*.cpp)
 OBJS = $(SRCS:.cpp=.o)
 
 # Rules for building
-all: $(OBJS)
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
 #	$(CC) $(FRAMEWORKS) $(OBJS) $(LDFLAGS) -o $@
 
 .cpp.o:
@@ -50,7 +61,7 @@ all: $(OBJS)
 lib:
 	$(shell) ./lib.sh
 
-run:
+run: $(TARGET)
 	./$(TARGET) $(ARGS)
 
 gdb:
@@ -66,3 +77,7 @@ clean:
 
 killall:
 	$(KILL) $(TARGET)
+
+full:
+	$(MAKE) clean
+	$(MAKE) run
