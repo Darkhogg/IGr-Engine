@@ -2,6 +2,9 @@
 #define __SCENE__H__
 
 #include "common.h"
+#include "camera.hpp"
+
+#include <iostream>
 
 namespace igr {
 
@@ -9,6 +12,7 @@ namespace igr {
   class scene {
     protected:
       sf::RenderWindow window;
+      camera cam;
 
     public:
       using event_t = sf::Event;
@@ -62,6 +66,7 @@ namespace igr {
       _this.on_update(elapsed.asSeconds());
 
       // Draw
+      cam.gl_update();
       _this.on_draw();
 
       // Swap buffers

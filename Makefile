@@ -52,7 +52,7 @@ OBJS = $(SRCS:.cpp=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-#	$(CC) $(FRAMEWORKS) $(OBJS) $(LDFLAGS) -o $@
+	$(CC) $(FRAMEWORKS) $(OBJS) $(LDFLAGS) -o $@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
