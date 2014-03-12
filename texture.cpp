@@ -2,7 +2,7 @@
 
 namespace igr {
 
-  void texture::bind (GLenum target) const {
+  void texture::gl_bind (GLenum target) const {
     glBindTexture(target, _globj->handle);
   }
 

@@ -50,6 +50,7 @@ namespace igr {
 
 
   using gl_texture = gl_obj<glGenTextures, glDeleteTextures>;
+  //using gl_buffer  = gl_obj<glGenBuffers,  glDeleteBuffers>;
 
 };
 

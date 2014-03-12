@@ -17,7 +17,7 @@ namespace igr {
         _globj{std::make_shared<gl_texture>()}
       {}
 
-      void bind (GLenum target) const;
+      void gl_bind (GLenum target) const;
   };
 
 }

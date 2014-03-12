@@ -11,4 +11,6 @@
 #include <GL/glx.h>
 #include <GL/glext.h>
 
+#include <cmath>
+
 #endif

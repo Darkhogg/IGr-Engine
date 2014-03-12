@@ -8,14 +8,14 @@
 namespace igr {
 
   struct camera {
-    vec<float> eye;
-    vec<float> look;
-    vec<float> up;
+    vec<double> eye;
+    vec<double> look;
+    vec<double> up;
 
     camera ()
     {}
 
-    camera (vec<float> eye, vec<float> look, vec<float> up)
+    camera (vec<double> eye, vec<double> look, vec<double> up)
       : eye(eye), look(look), up(up)
     {}
 
