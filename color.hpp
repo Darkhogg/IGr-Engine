@@ -13,10 +13,11 @@ namespace igr {
     color (float r, float g, float b, float a);
 
     void gl_set () const;
-
-    static const color white;
   };
 
+  struct colors {
+    static const color white, red, green, blue, yellow, aqua, magenta, black;
+  };
 }
 
 #endif

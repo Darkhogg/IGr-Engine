@@ -2,6 +2,7 @@
 #define __VEC__H__
 
 #include <stdexcept>
+#include <iostream>
 #include <cmath>
 
 namespace igr {
@@ -203,6 +204,15 @@ namespace igr {
     }
 
     throw std::runtime_error("invalid vector subscript index");
+  }
+
+  /* ======================= */
+  /* === STANDARD OUTPUT === */
+
+  template <typename C>
+  std::ostream& operator<< (std::ostream& ofs, const vec<C>& v) {
+    ofs << "(" << v.x << ", " << v.y << ", " << v.z << "; " << v.w << ")";
+    return ofs;
   }
 }
 

@@ -1,6 +1,13 @@
 #include "color.hpp"
 
-const igr::color igr::color::white = {1.f, 1.f, 1.f};
+const igr::color igr::colors::black   = {0.f, 0.f, 0.f};
+const igr::color igr::colors::red     = {1.f, 0.f, 0.f};
+const igr::color igr::colors::green   = {0.f, 1.f, 0.f};
+const igr::color igr::colors::blue    = {0.f, 0.f, 1.f};
+const igr::color igr::colors::yellow  = {1.f, 1.f, 0.f};
+const igr::color igr::colors::aqua    = {0.f, 1.f, 1.f};
+const igr::color igr::colors::magenta = {1.f, 0.f, 1.f};
+const igr::color igr::colors::white   = {1.f, 1.f, 1.f};
 
 
 igr::color::color ()
