@@ -22,7 +22,7 @@ namespace igr {
             sf::VideoMode::getDesktopMode(),
             "SFML Window - OpenGL Render",
             sf::Style::Default,
-            sf::ContextSettings{24, 8, 2}
+            sf::ContextSettings{24, 8, 2, 3, 0}
           }
         {}
 
@@ -38,6 +38,14 @@ namespace igr {
   template <typename derived>
   void scene<derived>::run () {
     derived& _this = * (derived*) this;
+
+    window.setVerticalSyncEnabled(true);
+
+    auto settings = window.getSettings();
+    std::cout << "Depth Buffer Bits ..... " << settings.depthBits << std::endl;
+    std::cout << "Stencil Buffer Bits ... " << settings.stencilBits << std::endl;
+    std::cout << "Multisample Level ..... " << settings.antialiasingLevel << std::endl;
+    std::cout << "OpenGL Version ........ " << settings.majorVersion << "." << settings.minorVersion << std::endl;
 
     sf::Clock clock;
     _this.on_begin();

@@ -20,6 +20,7 @@ void igr::mesh::gl_draw_immediate () {
   for (auto idx : indices) {
     auto vx = vertices[idx];
     glColor4f(vx.color.red, vx.color.green, vx.color.blue, vx.color.alpha);
+    glNormal3f(vx.normal.x, vx.normal.y, vx.normal.z);
     glVertex3f(vx.point.x, vx.point.y, vx.point.z);
   }
   glEnd();
@@ -36,10 +37,10 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   box.add_vertex({v2.x, v1.y, v1.z}, {+1.f, -1.f, -1.f}, col, {});
   box.add_vertex({v1.x, v2.y, v1.z}, {-1.f, +1.f, -1.f}, col, {});
   box.add_vertex({v2.x, v2.y, v1.z}, {+1.f, +1.f, -1.f}, col, {});
-  box.add_vertex({v1.x, v1.y, v2.z}, {-1.f, -1.f, +1.f}, col, {});
-  box.add_vertex({v2.x, v1.y, v2.z}, {+1.f, -1.f, +1.f}, col, {});
-  box.add_vertex({v1.x, v2.y, v2.z}, {-1.f, +1.f, +1.f}, col, {});
-  box.add_vertex({v2.x, v2.y, v2.z}, {+1.f, +1.f, +1.f}, col, {});
+  box.add_vertex({v1.x*0.8f, v1.y*0.8f, v2.z}, {-1.f, -1.f, +1.f}, col, {});
+  box.add_vertex({v2.x*0.8f, v1.y*0.8f, v2.z}, {+1.f, -1.f, +1.f}, col, {});
+  box.add_vertex({v1.x*0.8f, v2.y*0.8f, v2.z}, {-1.f, +1.f, +1.f}, col, {});
+  box.add_vertex({v2.x*0.8f, v2.y*0.8f, v2.z}, {+1.f, +1.f, +1.f}, col, {});
 
   box.add_face(0, 1, 2);   box.add_face(1, 3, 2);
   box.add_face(0, 2, 4);   box.add_face(4, 2, 6);

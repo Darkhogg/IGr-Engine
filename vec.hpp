@@ -39,6 +39,8 @@ namespace igr {
       C dot (const vec<C> other) const;
       vec<C> cross (const vec<C> other) const;
 
+      C angle (vec<C> other) const;
+
       vec<C> operator+= (const vec<C>& other);
       vec<C> operator-= (const vec<C>& other);
       vec<C> operator*= (const C scale);
@@ -67,12 +69,12 @@ namespace igr {
 
   template <typename C>
   C vec<C>::pitch () const {
-    return atan2(sqrt(x * x + y * y), z);
+    return atan2(sqrt(x * x + z * z), y);
   }
 
   template <typename C>
   C vec<C>::yaw () const {
-    return fmod(fmod(atan2(x, -y) - M_PI_2, 2 * M_PI) + 2 * M_PI, 2 * M_PI);
+    return fmod(fmod(atan2(x, z) - M_PI_2, 2 * M_PI) + 2 * M_PI, 2 * M_PI);
   }  
 
   /* =============== */
@@ -80,7 +82,7 @@ namespace igr {
 
   template <typename C>
   C vec<C>::squared_length () const {
-    return x*x + y*y - z*z;
+    return x*x + y*y + z*z;
   }
 
   template <typename C>
@@ -115,9 +117,17 @@ namespace igr {
 
   template <typename C>
   vec<C> vec<C>::cross (const vec<C> other) const {
-    throw std::runtime_error("cross product not implemented");
+    return {
+      y * other.z - z * other.y,
+      z * other.x - x * other.z,
+      x * other.y - y * other.x
+    };
   }
 
+  template<typename C>
+  C vec<C>::angle (const vec<C> other) const {
+    return acos(dot(other) / (length() * other.length()));
+  }
 
   /* ======================== */
   /* === BINARY OPERATORS === */
