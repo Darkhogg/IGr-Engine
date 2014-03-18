@@ -20,14 +20,9 @@ namespace igr {
       const C& operator() (std::size_t i, std::size_t j) const;
       C& operator() (std::size_t i, std::size_t j);
 
-      template<typename VC>
-      static matr<VC> make_translation (vec<VC> translation);
-
-      template<typename VC>
-      static matr<VC> make_scalation (vec<VC> scalation);
-
-      template<typename VC>
-      static matr<VC> make_rotation (vec<VC> around, double angle);
+      static matr<C> make_translation (vec<C> translation);
+      static matr<C> make_scalation (vec<C> scalation);
+      static matr<C> make_rotation (vec<C> around, double angle);
   };
 
 
@@ -49,22 +44,30 @@ namespace igr {
   /* =========================== */
   /* === STATIC CONSTRUCTION === */
 
-    template<typename VC>
-    matr<VC> matr::make_translation (vec<VC> translation) {
-      matr<VC> m;
+  template<typename C>
+  matr<C> matr<C>::make_translation (vec<C> translation) {
+    matr<C> m;
+    m(0, 3) = translation.x;
+    m(1, 3) = translation.y;
+    m(2, 3) = translation.z;
+    return m;
+  }
 
-      return m;
-    }
+  template<typename C>
+  matr<C> matr<C>::make_scalation (vec<C> scalation) {
+    matr<C> m;
+    m(0, 0) = scalation.x;
+    m(1, 1) = scalation.y;
+    m(2, 2) = scalation.z;
+    return m;
+  }
 
-    template<typename VC>
-    matr<VC> matr::make_scalation (vec<VC> scalation) {
+  template<typename C>
+  matr<C> matr<C>::make_rotation (vec<C> around, double angle) {
+    matr<C> m;
 
-    }
-
-    template<typename VC>
-    matr<VC> matr::make_rotation (vec<VC> around, double angle) {
-
-    }
+    return m;
+  }
 
 }
 
