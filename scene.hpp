@@ -17,9 +17,14 @@ namespace igr {
     public:
       using event_t = sf::Event;
 
-      scene () :
-        window{sf::VideoMode::getDesktopMode(), "SFML Window - OpenGL Render"}
-      {}
+      scene ()
+        : window{
+            sf::VideoMode::getDesktopMode(),
+            "SFML Window - OpenGL Render",
+            sf::Style::Default,
+            sf::ContextSettings{24, 8, 2}
+          }
+        {}
 
       void run ();
 
