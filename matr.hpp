@@ -21,17 +21,20 @@ namespace igr {
       }
       {}
 
-      const C& operator() (std::size_t i, std::size_t j) const;
+      C  operator() (std::size_t i, std::size_t j) const;
       C& operator() (std::size_t i, std::size_t j);
+
+      matr<C> operator+= (const matr<C> other);
+      matr<C> operator-= (const matr<C> other);
+      matr<C> operator*= (const C scale);
+      matr<C> operator/= (const C scale);
 
       void gl_load (GLenum);
       void gl_store () const;
 
-      static matr<C> transform (vec<C> from, vec<C> to);
-
-      static matr<C> make_translation (vec<C> translation);
-      static matr<C> make_scalation (vec<C> scalation);
-      static matr<C> make_rotation (vec<C> around, double angle);
+      static matr<C> make_translation (const vec<C> translation);
+      static matr<C> make_scalation (const vec<C> scalation);
+      static matr<C> make_rotation (const vec<C> around, double angle);
   };
 
 
@@ -39,7 +42,7 @@ namespace igr {
   /* === POSITION ACCESS === */
 
   template<typename C>
-  const C& matr<C>::operator() (std::size_t i, std::size_t j) const {
+  C matr<C>::operator() (std::size_t i, std::size_t j) const {
     return data[j + 4 * i];
   }
 
@@ -60,13 +63,7 @@ namespace igr {
 
   template<typename C>
   void matr<C>::gl_store () const {
-    const C* md = data.data();
-    float mf[16];
-    for (std::size_t i = 0; i <16; i++) {
-      mf[i] = (float) md[i];
-    }
-
-    glLoadMatrixf(mf);
+    glLoadMatrixf(data.data());
   }
 
 
@@ -99,18 +96,82 @@ namespace igr {
   }
 
 
-  /* ====================== */
-  /* === TRANSFORMATION === */
+  /* ================= */
+  /* === OPERATORS === */
 
   template<typename C>
-  matr<C> matr<C>::transform (vec<C> from, vec<C> to) {
+  matr<C> matr<C>::operator+= (matr<C> other) {
+    for (std::size_t i = 0; i < 16; i++) {
+      data[i] += other.data[i];
+    }
+  }
+
+  template<typename C>
+  matr<C> matr<C>::operator-= (matr<C> other) {
+    for (std::size_t i = 0; i < 16; i++) {
+      data[i] -= other.data[i];
+    }
+  }
+
+  template<typename C>
+  matr<C> matr<C>::operator*= (C scale) {
+    for (std::size_t i = 0; i < 16; i++) {
+      data[i] *= scale;
+    }
+  }
+
+  template<typename C>
+  matr<C> matr<C>::operator/= (C scale) {
+    for (std::size_t i = 0; i < 16; i++) {
+      data[i] /= scale;
+    }
+  }
+
+
+  template<typename C>
+  matr<C> operator+ (matr<C> m1, matr<C> m2) {
+    m1 += m2;
+    return m1;
+  }
+
+  template<typename C>
+  matr<C> operator- (matr<C> m1, matr<C> m2) {
+    m1 -= m2;
+    return m1;
+  }
+
+  template<typename C>
+  matr<C> operator* (matr<C> m, C s) {
+    m *= s;
+    return m;
+  }
+
+  template<typename C>
+  matr<C> operator/ (matr<C> m, matr<C> s) {
+    m /= s;
+    return m;
+  }
+
+  template<typename C>
+  matr<C> operator* (matr<C> m1, matr<C> m2) {
     matr<C> m;
+
     for (std::size_t i = 0; i < 4; i++) {
       for (std::size_t j = 0; j < 4; j++) {
-        m(i, j) = from[i] * to[j];
+        C pos;
+        for (std::size_t k = 0; k < 4; k++) {
+          pos += m1(i, k) * m2(k, j);
+        }
+        m(i, j) = pos;
       }
     }
+
     return m;
+  }
+
+  template<typename C>
+  vec<C> operator* (matr<C> m, vec<C> v) {
+    
   }
 
 }

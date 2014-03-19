@@ -17,14 +17,16 @@ namespace igr {
     public:
       using event_t = sf::Event;
 
-      scene ()
+      scene (std::string title)
         : window{
             sf::VideoMode::getDesktopMode(),
-            "SFML Window - OpenGL Render",
+            title,
             sf::Style::Default,
-            sf::ContextSettings{24, 8, 2, 3, 0}
+            sf::ContextSettings{24, 8, 2, 4, 4}
           }
-        {}
+        {
+          std::cout << std::endl << "\x1B[1;34m[" << title << "]\x1B[m" << std::endl;
+        }
 
       void run ();
 
@@ -42,10 +44,15 @@ namespace igr {
     window.setVerticalSyncEnabled(true);
 
     auto settings = window.getSettings();
-    std::cout << "Depth Buffer Bits ..... " << settings.depthBits << std::endl;
-    std::cout << "Stencil Buffer Bits ... " << settings.stencilBits << std::endl;
-    std::cout << "Multisample Level ..... " << settings.antialiasingLevel << std::endl;
-    std::cout << "OpenGL Version ........ " << settings.majorVersion << "." << settings.minorVersion << std::endl;
+    std::cout << "  \x1B[1;32mDepth Buffer Bits\x1B[m ..... \x1B[1m"
+              << settings.depthBits << "\x1B[m" << std::endl
+              << "  \x1B[1;32mStencil Buffer Bits\x1B[m ... \x1B[1m"
+              << settings.stencilBits << "\x1B[m" << std::endl
+              << "  \x1B[1;32mMultisample Level\x1B[m ..... \x1B[1m"
+              << settings.antialiasingLevel << "\x1B[m" << std::endl
+              << "  \x1B[1;32mOpenGL Version\x1B[m ........ \x1B[1m"
+              << settings.majorVersion << "." << settings.minorVersion
+              << "\x1B[m" << std::endl;
 
     sf::Clock clock;
     _this.on_begin();

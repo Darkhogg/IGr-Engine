@@ -6,7 +6,7 @@ void igr::mesh::clear () {
 }
 
 void igr::mesh::add_vertex (point_t pt, vector_t normal, color_t col, texcoord_t texcoord) {
-  vertices.push_back(vertex_t{pt, normal.normalized(), col, texcoord});
+  vertices.emplace_back(pt, normal.normalized(), col, texcoord);
 }
 
 void igr::mesh::add_face (index_t idx1, index_t idx2, index_t idx3) {
@@ -37,10 +37,10 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   box.add_vertex({v2.x, v1.y, v1.z}, {+1.f, -1.f, -1.f}, col, {});
   box.add_vertex({v1.x, v2.y, v1.z}, {-1.f, +1.f, -1.f}, col, {});
   box.add_vertex({v2.x, v2.y, v1.z}, {+1.f, +1.f, -1.f}, col, {});
-  box.add_vertex({v1.x*0.8f, v1.y*0.8f, v2.z}, {-1.f, -1.f, +1.f}, col, {});
-  box.add_vertex({v2.x*0.8f, v1.y*0.8f, v2.z}, {+1.f, -1.f, +1.f}, col, {});
-  box.add_vertex({v1.x*0.8f, v2.y*0.8f, v2.z}, {-1.f, +1.f, +1.f}, col, {});
-  box.add_vertex({v2.x*0.8f, v2.y*0.8f, v2.z}, {+1.f, +1.f, +1.f}, col, {});
+  box.add_vertex({v1.x, v1.y, v2.z}, {-1.f, -1.f, +1.f}, col, {});
+  box.add_vertex({v2.x, v1.y, v2.z}, {+1.f, -1.f, +1.f}, col, {});
+  box.add_vertex({v1.x, v2.y, v2.z}, {-1.f, +1.f, +1.f}, col, {});
+  box.add_vertex({v2.x, v2.y, v2.z}, {+1.f, +1.f, +1.f}, col, {});
 
   box.add_face(0, 1, 2);   box.add_face(1, 3, 2);
   box.add_face(0, 2, 4);   box.add_face(4, 2, 6);
