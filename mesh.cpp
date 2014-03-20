@@ -6,6 +6,8 @@ void igr::mesh::clear () {
 }
 
 void igr::mesh::add_vertex (point_t pt, vector_t normal, color_t col, texcoord_t texcoord) {
+  pt.w = 1;
+  normal.w = 0;
   vertices.emplace_back(pt, normal.normalized(), col, texcoord);
 }
 
@@ -15,7 +17,25 @@ void igr::mesh::add_face (index_t idx1, index_t idx2, index_t idx3) {
   indices.push_back(idx3);
 }
 
-void igr::mesh::gl_draw_immediate () {
+
+
+void igr::mesh::transform (matrix_t matr) {
+  for (std::size_t i = 0; i < vertices.size(); ++i) {
+    vertex_t v = vertices[i];
+    v.point  = matr * v.point;
+    v.normal = matr * v.normal;
+    vertices[i] = v;
+  }
+}
+
+igr::mesh igr::mesh::transformed (matrix_t matr) const {
+  mesh other {*this};
+  other.transform(matr);
+  return other;
+}
+
+
+void igr::mesh::gl_draw_immediate () const {
   glBegin(GL_TRIANGLES);
   for (auto idx : indices) {
     auto vx = vertices[idx];
@@ -50,4 +70,17 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   box.add_face(5, 4, 6);   box.add_face(5, 6, 7);
 
   return box;
+}
+
+
+std::ostream& igr::operator<< (std::ostream& os, const igr::mesh& m) {
+  os << "mesh{" << std::endl << "  ";
+  for (auto v : m.vertices) {
+    os << v.point << std::endl << "  ";
+  }
+  for (auto i : m.indices) {
+    os << i << ' ';
+  }
+  os << std::endl << "}" << std::flush;
+  return os;
 }

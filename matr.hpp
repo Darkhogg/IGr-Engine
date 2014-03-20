@@ -35,6 +35,9 @@ namespace igr {
       static matr<C> make_translation (const vec<C> translation);
       static matr<C> make_scalation (const vec<C> scalation);
       static matr<C> make_rotation (const vec<C> around, double angle);
+
+      template<typename M>
+      friend std::ostream& operator<< (std::ostream&, const matr<M>&);
   };
 
 
@@ -158,7 +161,7 @@ namespace igr {
 
     for (std::size_t i = 0; i < 4; i++) {
       for (std::size_t j = 0; j < 4; j++) {
-        C pos;
+        C pos = 0;
         for (std::size_t k = 0; k < 4; k++) {
           pos += m1(i, k) * m2(k, j);
         }
@@ -171,8 +174,42 @@ namespace igr {
 
   template<typename C>
   vec<C> operator* (matr<C> m, vec<C> v) {
-    
+    vec<C> rv;
+    for (std::size_t i = 0; i < 4; ++i) {
+      C pos = 0;
+      for (std::size_t k = 0; k < 4; ++k) {
+        pos += m(i, k) * v[k];
+      }
+      rv[i] = pos;
+    }
+    return rv;
   }
+
+  template<typename C>
+  vec<C> operator* (vec<C> v, matr<C> m) {
+    vec<C> rv;
+    for (std::size_t j = 0; j < 4; ++j) {
+      C pos = 0;
+      for (std::size_t k = 0; k < 4; ++k) {
+        pos += m(k, j) * v[k];
+      }
+      rv[j] = pos;
+    }
+    return rv;
+  }
+
+  template<typename C>
+  std::ostream& operator<< (std::ostream& os, const matr<C>& m) {
+    for (std::size_t i = 0; i < 4; ++i) {
+      os << "|  ";
+      for (std::size_t j = 0; j < 4; ++j) {
+        os << m(i, j) << "  ";
+      }
+      os << "|" << std::endl;
+    }
+    return os;
+  }
+
 
 }
 

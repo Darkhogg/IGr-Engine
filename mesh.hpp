@@ -21,7 +21,6 @@ namespace igr {
       using index_t    = std::size_t;
       using matrix_t   = matr<double>;
 
-    private:
       /* Description of a vertex */
       struct vertex_t {
         point_t    point;
@@ -34,7 +33,7 @@ namespace igr {
           {}
       };
 
-    private:
+    public:
       std::vector<vertex_t> vertices;
       std::vector<index_t>  indices;
 
@@ -47,14 +46,17 @@ namespace igr {
       void add_face (index_t idx1, index_t idx2, index_t idx3);
 
       void transform (matrix_t matrix);
+      mesh transformed (matrix_t matrix) const;
 
-      void gl_store();
+      void gl_store() const;
       void gl_draw();
-      void gl_draw_immediate();
+      void gl_draw_immediate() const;
 
       static mesh make_aligned_box (color_t col);
-  };
 
+      friend std::ostream& operator<< (std::ostream& os, const igr::mesh& m);
+  };
+  
 }
 
 #endif

@@ -22,7 +22,7 @@ namespace igr {
             sf::VideoMode::getDesktopMode(),
             title,
             sf::Style::Default,
-            sf::ContextSettings{24, 8, 2, 4, 4}
+            sf::ContextSettings{24, 8, 8, 4, 4}
           }
         {
           std::cout << std::endl << "\x1B[1;34m[" << title << "]\x1B[m" << std::endl;
@@ -44,13 +44,13 @@ namespace igr {
     window.setVerticalSyncEnabled(true);
 
     auto settings = window.getSettings();
-    std::cout << "  \x1B[1;32mDepth Buffer Bits\x1B[m ..... \x1B[1m"
+    std::cout << "* \x1B[1;35mDepth Buffer Bits\x1B[m ..... \x1B[1m"
               << settings.depthBits << "\x1B[m" << std::endl
-              << "  \x1B[1;32mStencil Buffer Bits\x1B[m ... \x1B[1m"
+              << "* \x1B[1;35mStencil Buffer Bits\x1B[m ... \x1B[1m"
               << settings.stencilBits << "\x1B[m" << std::endl
-              << "  \x1B[1;32mMultisample Level\x1B[m ..... \x1B[1m"
+              << "* \x1B[1;35mMultisample Level\x1B[m ..... \x1B[1m"
               << settings.antialiasingLevel << "\x1B[m" << std::endl
-              << "  \x1B[1;32mOpenGL Version\x1B[m ........ \x1B[1m"
+              << "* \x1B[1;35mOpenGL Version\x1B[m ........ \x1B[1m"
               << settings.majorVersion << "." << settings.minorVersion
               << "\x1B[m" << std::endl;
 
