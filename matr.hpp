@@ -14,9 +14,9 @@ namespace igr {
 
     public:
       matr () : data{
-        { 0.0, 0.0, 0.0, 0.0,
-          0.0, 0.0, 0.0, 0.0,
-          0.0, 0.0, 0.0, 0.0,
+        { 1.0, 0.0, 0.0, 0.0,
+          0.0, 1.0, 0.0, 0.0,
+          0.0, 0.0, 1.0, 0.0,
           0.0, 0.0, 0.0, 1.0 }
       }
       {}
@@ -35,6 +35,10 @@ namespace igr {
       static matr<C> make_translation (const vec<C> translation);
       static matr<C> make_scalation (const vec<C> scalation);
       static matr<C> make_rotation (const vec<C> around, double angle);
+
+      static matr<C> make_rotation_x (double angle);
+      static matr<C> make_rotation_y (double angle);
+      static matr<C> make_rotation_z (double angle);
 
       template<typename M>
       friend std::ostream& operator<< (std::ostream&, const matr<M>&);
@@ -76,6 +80,7 @@ namespace igr {
   template<typename C>
   matr<C> matr<C>::make_translation (vec<C> translation) {
     matr<C> m;
+    m(0, 0) = m(1, 1) = m(2, 2) = 0.0;
     m(0, 3) = translation.x;
     m(1, 3) = translation.y;
     m(2, 3) = translation.z;
@@ -95,6 +100,36 @@ namespace igr {
   matr<C> matr<C>::make_rotation (vec<C> around, double angle) {
     matr<C> m;
 
+    return m;
+  }
+
+  template<typename C>
+  matr<C> matr<C>::make_rotation_x (double angle) {
+    matr<C> m;
+    m(1, 1) = cos(angle);
+    m(1, 2) = sin(angle);
+    m(2, 1) = -sin(angle);
+    m(2, 2) = cos(angle);
+    return m;
+  }
+
+  template<typename C>
+  matr<C> matr<C>::make_rotation_y (double angle) {
+    matr<C> m;
+    m(0, 0) = cos(angle);
+    m(0, 2) = sin(angle);
+    m(2, 0) = -sin(angle);
+    m(2, 2) = cos(angle);
+    return m;
+  }
+
+  template<typename C>
+  matr<C> matr<C>::make_rotation_z (double angle) {
+    matr<C> m;
+    m(0, 0) = cos(angle);
+    m(0, 1) = sin(angle);
+    m(1, 0) = -sin(angle);
+    m(1, 1) = cos(angle);
     return m;
   }
 

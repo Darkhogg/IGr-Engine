@@ -52,6 +52,8 @@ namespace igr {
       void gl_draw();
       void gl_draw_immediate() const;
 
+      void gl_draw_normals() const;
+
       static mesh make_aligned_box (color_t col);
 
       friend std::ostream& operator<< (std::ostream& os, const igr::mesh& m);

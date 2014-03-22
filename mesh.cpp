@@ -46,6 +46,17 @@ void igr::mesh::gl_draw_immediate () const {
   glEnd();
 }
 
+void igr::mesh::gl_draw_normals () const {
+  glBegin(GL_LINES);
+  for (auto idx : indices) {
+    auto vx = vertices[idx];
+    glColor4f(vx.color.red, vx.color.green, vx.color.blue, vx.color.alpha);
+    glVertex3f(vx.point.x, vx.point.y, vx.point.z);
+    glVertex3f(vx.point.x + vx.normal.x, vx.point.y + vx.normal.y, vx.point.z + vx.normal.z);
+  }
+  glEnd();
+}
+
 
 igr::mesh igr::mesh::make_aligned_box (color_t col) {
   point_t v1 { -0.5f, -0.5f, -0.5f };
