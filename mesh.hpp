@@ -55,6 +55,7 @@ namespace igr {
       void gl_draw_normals() const;
 
       static mesh make_aligned_box (color_t col);
+      static mesh make_aligned_cylinder (color_t col, std::size_t sides);
 
       friend std::ostream& operator<< (std::ostream& os, const igr::mesh& m);
   };

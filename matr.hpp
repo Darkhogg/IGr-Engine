@@ -80,7 +80,7 @@ namespace igr {
   template<typename C>
   matr<C> matr<C>::make_translation (vec<C> translation) {
     matr<C> m;
-    m(0, 0) = m(1, 1) = m(2, 2) = 0.0;
+    //m(0, 0) = m(1, 1) = m(2, 2) = 0.0;
     m(0, 3) = translation.x;
     m(1, 3) = translation.y;
     m(2, 3) = translation.z;
@@ -99,7 +99,7 @@ namespace igr {
   template<typename C>
   matr<C> matr<C>::make_rotation (vec<C> around, double angle) {
     matr<C> m;
-
+    
     return m;
   }
 

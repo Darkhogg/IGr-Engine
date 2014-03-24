@@ -83,6 +83,54 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   return box;
 }
 
+igr::mesh igr::mesh::make_aligned_cylinder (color_t col, std::size_t sides) {
+  mesh cyl;
+
+  cyl.add_vertex(
+      {0.0, 0.0, 0.5},
+      {0.0, 0.0, 1.0},
+      col, {}
+  );
+  cyl.add_vertex(
+      {0.0, 0.0, -0.5},
+      {0.0, 0.0, -1.0},
+      col, {}
+  );
+
+  for (std::size_t i = 1; i <= sides; ++i) {
+    double ang = (i - 1) * 2.0 * M_PI / (double) sides;
+
+    /* Add the two vertices */
+    cyl.add_vertex(
+      {0.5 * cos(ang), 0.5 * sin(ang), 0.5},
+      {cos(ang), sin(ang), 0},
+      col, {}
+    );
+    cyl.add_vertex(
+      {0.5 * cos(ang), 0.5 * sin(ang), -0.5},
+      {cos(ang), sin(ang), 0},
+      col, {}
+    );
+
+    std::size_t j = i - 1;
+
+    std::size_t f00 = 2 + (j * 2);
+    std::size_t f01 = 3 + (j * 2);
+    std::size_t f10 = 2 + (((j + 1) * 2 )    % (sides * 2));
+    std::size_t f11 = 2 + (((j + 1) * 2 + 1) % (sides * 2));
+
+    /* Add the two faces */
+    cyl.add_face(f00, f10, f01);
+    cyl.add_face(f01, f10, f11);
+
+    cyl.add_face(0, f10, f00);
+    cyl.add_face(1, f01, f11);
+
+  }
+
+  return cyl;
+}
+
 
 std::ostream& igr::operator<< (std::ostream& os, const igr::mesh& m) {
   os << "mesh{" << std::endl << "  ";
