@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #ifndef __MESH__HPP__
 #define __MESH__HPP__
 

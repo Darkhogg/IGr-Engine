@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #ifndef __CAMERA__HPP__
 #define __CAMERA__HPP__
 

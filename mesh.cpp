@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #include "mesh.hpp"
 
 void igr::mesh::clear () {

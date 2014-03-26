@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #include "color.hpp"
 
 const igr::color igr::colors::black   = {0.f, 0.f, 0.f};

@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #ifndef __COLOR__HPP__
 #define __COLOR__HPP__
 
