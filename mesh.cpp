@@ -64,7 +64,7 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
 
   mesh box {};
 
-  box.add_vertex({v1.x, v1.y, v1.z}, {-1.f, -1.f, -1.f}, col, {});
+  /*box.add_vertex({v1.x, v1.y, v1.z}, {-1.f, -1.f, -1.f}, col, {});
   box.add_vertex({v2.x, v1.y, v1.z}, {+1.f, -1.f, -1.f}, col, {});
   box.add_vertex({v1.x, v2.y, v1.z}, {-1.f, +1.f, -1.f}, col, {});
   box.add_vertex({v2.x, v2.y, v1.z}, {+1.f, +1.f, -1.f}, col, {});
@@ -78,7 +78,57 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   box.add_face(1, 0, 4);   box.add_face(1, 4, 5);
   box.add_face(1, 5, 3);   box.add_face(5, 7, 3);
   box.add_face(2, 3, 6);   box.add_face(6, 3, 7);
-  box.add_face(5, 4, 6);   box.add_face(5, 6, 7);
+  box.add_face(5, 4, 6);   box.add_face(5, 6, 7);*/
+
+  /* Bottom */
+  box.add_vertex({v1.x, v1.y, v1.z}, {0.f, -1.f, 0.f}, col, {});
+  box.add_vertex({v1.x, v1.y, v2.z}, {0.f, -1.f, 0.f}, col, {});
+  box.add_vertex({v2.x, v1.y, v1.z}, {0.f, -1.f, 0.f}, col, {});
+  box.add_vertex({v2.x, v1.y, v2.z}, {0.f, -1.f, 0.f}, col, {});
+
+  box.add_face(0, 1, 2);   box.add_face(1, 3, 2);
+
+  /* Top */
+  box.add_vertex({v1.x, v2.y, v1.z}, {0.f, +1.f, 0.f}, col, {});
+  box.add_vertex({v1.x, v2.y, v2.z}, {0.f, +1.f, 0.f}, col, {});
+  box.add_vertex({v2.x, v2.y, v1.z}, {0.f, +1.f, 0.f}, col, {});
+  box.add_vertex({v2.x, v2.y, v2.z}, {0.f, +1.f, 0.f}, col, {});
+
+  box.add_face(4, 6, 5);   box.add_face(5, 6, 7);
+
+  /* Left */
+  box.add_vertex({v1.x, v1.y, v1.z}, {-1.f, 0.f, 0.f}, col, {});
+  box.add_vertex({v1.x, v1.y, v2.z}, {-1.f, 0.f, 0.f}, col, {});
+  box.add_vertex({v1.x, v2.y, v1.z}, {-1.f, 0.f, 0.f}, col, {});
+  box.add_vertex({v1.x, v2.y, v2.z}, {-1.f, 0.f, 0.f}, col, {});
+
+  box.add_face(8, 10, 9);   box.add_face(9, 10, 11);
+
+  /* Right */
+  box.add_vertex({v2.x, v1.y, v1.z}, {+1.f, 0.f, 0.f}, col, {});
+  box.add_vertex({v2.x, v1.y, v2.z}, {+1.f, 0.f, 0.f}, col, {});
+  box.add_vertex({v2.x, v2.y, v1.z}, {+1.f, 0.f, 0.f}, col, {});
+  box.add_vertex({v2.x, v2.y, v2.z}, {+1.f, 0.f, 0.f}, col, {});
+
+  box.add_face(12, 13, 14);   box.add_face(13, 15, 14);
+
+  /* Near */
+  box.add_vertex({v1.x, v1.y, v1.z}, {0.f, 0.f, -1.f}, col, {});
+  box.add_vertex({v1.x, v2.y, v1.z}, {0.f, 0.f, -1.f}, col, {});
+  box.add_vertex({v2.x, v1.y, v1.z}, {0.f, 0.f, -1.f}, col, {});
+  box.add_vertex({v2.x, v2.y, v1.z}, {0.f, 0.f, -1.f}, col, {});
+
+  box.add_face(16, 18, 17);   box.add_face(17, 18, 19);
+
+  /* Far */
+  box.add_vertex({v1.x, v1.y, v2.z}, {0.f, 0.f, +1.f}, col, {});
+  box.add_vertex({v1.x, v2.y, v2.z}, {0.f, 0.f, +1.f}, col, {});
+  box.add_vertex({v2.x, v1.y, v2.z}, {0.f, 0.f, +1.f}, col, {});
+  box.add_vertex({v2.x, v2.y, v2.z}, {0.f, 0.f, +1.f}, col, {});
+
+  box.add_face(20, 21, 22);   box.add_face(21, 23, 22);
+
+
 
   return box;
 }

@@ -4,6 +4,7 @@
 #include "common.h"
 
 #include "vec.hpp"
+#include "matr.hpp"
 
 namespace igr {
 
@@ -18,6 +19,9 @@ namespace igr {
     camera (vec<double> eye, vec<double> look, vec<double> up)
       : eye(eye), look(look), up(up)
     {}
+
+      void transform (matr<double> matrix);
+      camera transformed (matr<double> matrix) const;
 
     void gl_update ();
   };
