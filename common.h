@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #ifndef __COMMON__H__
 #define __COMMON__H__
 

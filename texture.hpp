@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #ifndef __TEXTURE__HPP__
 #define __TEXTURE__HPP__
 

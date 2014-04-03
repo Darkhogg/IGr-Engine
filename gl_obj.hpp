@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #ifndef __GL_OBJ__HPP__
 #define __GL_OBJ__HPP__
 

@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Escoz Solana
+ */
 #include "camera.hpp"
 
 void igr::camera::gl_update () {
