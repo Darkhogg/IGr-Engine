@@ -23,8 +23,14 @@ namespace igr {
       : eye(eye), look(look), up(up)
     {}
 
-      void transform (matr<double> matrix);
-      camera transformed (matr<double> matrix) const;
+    void normalize ();
+
+    void transform (matr<double> matrix);
+    camera transformed (matr<double> matrix) const;
+
+    void yaw (double ang);
+    void pitch (double ang);
+    void roll (double ang);
 
     void gl_update ();
   };

@@ -100,9 +100,44 @@ namespace igr {
   }
 
   template<typename C>
-  matr<C> matr<C>::make_rotation (vec<C> around, double angle) {
+  matr<C> matr<C>::make_rotation (vec<C> u, double angle) {
+    u.normalize();
+
+    auto c  = cos(angle);
+    auto s  = sin(angle);
+    auto c1 = 1 - c;
+
+    auto ux = u.x;
+    auto ux2 = ux * ux;
+
+    auto uy = u.y;
+    auto uy2 = uy * uy;
+
+    auto uz = u.z;
+    auto uz2 = uz * uz;
+
     matr<C> m;
-    
+
+    m(0, 0) = c + ux2 * c1;
+    m(0, 1) = ux * uy * c1 - uz * s;
+    m(0, 2) = ux * uz * c1 + uy * s;
+    m(0, 3) = 0.0;
+
+    m(1, 0) = uy * ux * c1 + uz * s;
+    m(1, 1) = c + uy2 * c1;
+    m(1, 2) = uy * uz * c1 - ux * s;
+    m(1, 3) = 0.0;
+
+    m(2, 0) = uz * ux * c1 - uy * s;
+    m(2, 1) = uz * uy * c1 + ux * s;
+    m(2, 2) = c + uz2 * c1;
+    m(2, 3) = 0.0;
+
+    m(3, 0) = 0.0;
+    m(3, 1) = 0.0;
+    m(3, 2) = 0.0;
+    m(3, 3) = 1.0;
+
     return m;
   }
 
