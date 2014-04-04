@@ -5,13 +5,11 @@
  #include <iostream>
 
 void igr::camera::normalize () {
-  std::cout << up << "{" << up.length() << "}";
   eye.w  = 1.0;
   look.w = 1.0;
   up.w   = 0.0;
 
   up = up.cross(look - eye).cross(eye - look).normalized();
-  std::cout << " -> " << up << "{" << up.length() << "}" << std::endl;
 }
 
 void igr::camera::gl_update () {

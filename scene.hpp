@@ -7,7 +7,11 @@
 #include "common.h"
 #include "camera.hpp"
 
+#include "dejavu.blob.hpp"
+
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 
 namespace igr {
 
@@ -15,6 +19,7 @@ namespace igr {
   class scene {
     protected:
       sf::RenderWindow window;
+      sf::Font dejavu;
       camera cam;
 
     public:
@@ -46,6 +51,8 @@ namespace igr {
 
     window.setVerticalSyncEnabled(true);
 
+    dejavu.loadFromMemory(_blob_dejavu.data(), _blob_dejavu.size());
+
     auto settings = window.getSettings();
     std::cout << "* \x1B[1;35mDepth Buffer Bits\x1B[m ..... \x1B[1m"
               << settings.depthBits << "\x1B[m" << std::endl
@@ -61,15 +68,11 @@ namespace igr {
     _this.on_begin();
 
     while (window.isOpen()) {
+      window.clear();
+
       // Clock events
       sf::Time elapsed = clock.getElapsedTime();
       clock.restart();
-
-      // Print it
-      std::cout << " \033[K"
-        << elapsed.asMilliseconds() << " ms\t"
-        << (1 / elapsed.asSeconds()) << "fps\r"
-        << std::flush;
 
       // Event polling
       sf::Event event;
@@ -91,6 +94,21 @@ namespace igr {
       // Draw
       cam.gl_update();
       _this.on_draw();
+
+      // Print it
+      std::stringstream ss;
+      ss << elapsed.asMilliseconds() << " ms\t"
+         << std::fixed << std::setprecision(1) 
+        << (1 / elapsed.asSeconds()) << "fps";
+
+      sf::Text text;
+      text.setFont(dejavu);
+      text.setString(ss.str());
+      text.setColor(sf::Color::White);
+      text.setCharacterSize(12);
+
+      window.resetGLStates();
+      window.draw(text);
 
       // Swap buffers
       window.display();

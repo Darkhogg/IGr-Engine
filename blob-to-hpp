@@ -1,0 +1,24 @@
+#!/bin/bash
+BLOB="$1"
+NAME="${BLOB%.blob}"
+SIZE=$(stat -c%s "$BLOB")
+HPP="$BLOB.hpp"
+
+# Write a code file defining the actual data
+{
+  cat <<EOF
+static const std::array<unsigned char, $SIZE> _blob_${NAME} {
+EOF
+
+  t=0
+  for b in $(hexdump -ve '1/1 "%.2x "' "$BLOB"); do
+    let t++
+    echo -n "0x$b,"
+    if [ $t -eq 16 ]; then
+      t=0
+      echo
+    fi
+  done
+
+  echo "};"
+} >>"$HPP"

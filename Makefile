@@ -16,6 +16,7 @@ endif
 
 #CC     = gfilt /cand:L -m32
 CP     = cp
+BTOC   = ./blob-to-hpp
 RM     = rm -rf
 KILL   = killall -9
 SHELL  = /bin/bash
@@ -45,17 +46,23 @@ MAKEFLAGS+=-j$(JOBS)
 
 # The source files
 SRCS = $(wildcard ./*.cpp ./*/*.cpp)
+BLOBS = $(wildcard ./*.blob ./*/*.blob)
 
 OBJS = $(SRCS:.cpp=.o)
+HBLOBS = $(BLOBS:.blob=.blob.hpp)
 
 # Rules for building
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
-	$(CC) $(FRAMEWORKS) $(OBJS) $(LDFLAGS) -o $@
+$(TARGET): $(HBLOBS) $(OBJS)
+	#$(CC) $(FRAMEWORKS) $(OBJS) $(LDFLAGS) -o $@
 
-.cpp.o:
+%.blob.hpp: %.blob
+	$(BTOC) $<
+
+%.o: %.cpp $(HBLOBS)
 	$(CC) $(CFLAGS) $< -o $@
+
 
 .PHONY: lib
 lib:
@@ -74,6 +81,9 @@ valgrind:
 
 clean:
 	$(RM) $(TARGET) $(OBJS)
+
+ultraclean: clean
+	$(RM) $(HBLOBS)
 
 killall:
 	$(KILL) $(TARGET)
