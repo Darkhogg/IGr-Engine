@@ -13,15 +13,20 @@ void igr::camera::normalize () {
 }
 
 void igr::camera::gl_update () {
-  normalize();
+  auto norm = *this;
+  norm.normalize();
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  gluLookAt(eye.x, eye.y, eye.z, look.x, look.y, look.z, up.x, up.y, up.z);
+  gluLookAt(
+    norm.eye.x, norm.eye.y, norm.eye.z,
+    norm.look.x, norm.look.y, norm.look.z,
+    norm.up.x, norm.up.y, norm.up.z
+  );
 }
 
 void igr::camera::transform (matr<double> matrix) {
-  normalize();
+  //normalize();
 
   eye = eye * matrix;
   look = look * matrix;
@@ -30,7 +35,7 @@ void igr::camera::transform (matr<double> matrix) {
 
 
 void igr::camera::yaw (double ang) {
-  normalize();
+  //normalize();
   auto rot = matr<double>::make_rotation({0.0, 1.0, 0.0}, ang);
 
   auto dir = look - eye;
@@ -41,7 +46,7 @@ void igr::camera::yaw (double ang) {
 }
 
 void igr::camera::pitch (double ang) {
-  normalize();
+  //normalize();
   auto rot = matr<double>::make_rotation((look - eye).cross({0.0, 1.0, 0.0}), ang);
 
   auto dir = look - eye;
@@ -52,7 +57,7 @@ void igr::camera::pitch (double ang) {
 }
 
 void igr::camera::roll (double ang) {
-  normalize();
+  //normalize();
   up = matr<double>::make_rotation(look - eye, ang) * up;
 }
 
