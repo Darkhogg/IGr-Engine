@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <tuple>
-#include <iostream>
+#include <ostream>
 
 namespace igr {
 
@@ -59,6 +59,7 @@ namespace igr {
 
       static mesh make_aligned_box (color_t col);
       static mesh make_aligned_cylinder (color_t col, std::size_t sides);
+      static mesh make_aligned_sphere (color_t col, std::size_t meridians, std::size_t parallels);
 
       friend std::ostream& operator<< (std::ostream& os, const igr::mesh& m);
   };

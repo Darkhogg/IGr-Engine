@@ -11,7 +11,8 @@ void igr::mesh::clear () {
 void igr::mesh::add_vertex (point_t pt, vector_t normal, color_t col, texcoord_t texcoord) {
   pt.w = 1;
   normal.w = 0;
-  vertices.emplace_back(pt, normal.normalized(), col, texcoord);
+  normal.normalize();
+  vertices.emplace_back(pt, normal, col, texcoord);
 }
 
 void igr::mesh::add_face (index_t idx1, index_t idx2, index_t idx3) {
@@ -182,6 +183,51 @@ igr::mesh igr::mesh::make_aligned_cylinder (color_t col, std::size_t sides) {
   }
 
   return cyl;
+}
+
+igr::mesh igr::mesh::make_aligned_sphere (color_t col, std::size_t meridians, std::size_t parallels) {
+  mesh sph;
+
+  sph.add_vertex({0.0, -0.5, 0.0}, {0.0, -1.0, 0.0}, col, {});
+  sph.add_vertex({0.0,  0.5, 0.0}, {0.0,  1.0, 0.0}, col, {});
+
+  for (std::size_t p = 0; p < parallels; ++p) {
+    double angy = M_PI * (((double) p + 1.0) / ((double) parallels + 1.0));
+    double siny = sin(angy);
+    double posY = -cos(angy) * 0.5;
+
+    for (std::size_t m = 0; m < meridians; ++m) {
+      double ang = m * (2.0 * M_PI / (double) meridians);
+      double posX = 0.5 * cos(ang) * siny;
+      double posZ = 0.5 * sin(ang) * siny;
+
+      sph.add_vertex({posX, posY, posZ}, {posX, posY, posZ}, col, {});
+
+      /* Join vertex with the next */
+      std::size_t k00 = 2 + m * parallels + p;
+      std::size_t k01 = 2 + m * parallels + ((p + 1) % parallels);
+      std::size_t k10 = 2 + ((m + 1) % meridians) * parallels + p;
+      std::size_t k11 = 2 + ((m + 1) % meridians) * parallels + ((p + 1) % parallels);
+
+      if (m < meridians - 1) {
+        // Case 1: we are in an interior row
+        sph.add_face(k00, k01, k10);
+        sph.add_face(k10, k01, k11);
+
+      } else {
+        // Case 2: we are in the LAST row
+        sph.add_face(k00, k01, 1);
+      }
+
+      // Special case: we are in the FIRST row
+      if (m == 0) {
+        sph.add_face(k01, k00, 0);
+      }
+    }
+
+  }
+
+  return sph;
 }
 
 
