@@ -7,6 +7,7 @@
 #include <array>
 
 #include "common.h"
+#include "vec.hpp"
 
 namespace igr {
 
@@ -34,6 +35,7 @@ namespace igr {
 
       void gl_load (GLenum);
       void gl_store () const;
+      void gl_mult() const;
 
       static matr<C> make_translation (const vec<C> translation);
       static matr<C> make_scalation (const vec<C> scalation);
@@ -63,17 +65,22 @@ namespace igr {
   }
 
 
-  /* ========================= */
-  /* === OPENGL LOAD/STORE === */
+  /* ============================== */
+  /* === OPENGL LOAD/STORE/MULT === */
 
   template<typename C>
   void matr<C>::gl_load (GLenum matrix) {
-
+    /* TO-DO */
   }
 
   template<typename C>
   void matr<C>::gl_store () const {
-    glLoadMatrixf(data.data());
+    glLoadMatrixd(data.data());
+  }
+
+  template<typename C>
+  void matr<C>::gl_mult () const {
+    glMultMatrixd(data.data());
   }
 
 
