@@ -55,13 +55,13 @@ namespace igr {
 
   template<typename C>
   C matr<C>::operator() (std::size_t i, std::size_t j) const {
-    return data[j + 4 * i];
+    return data[i + 4 * j];
   }
 
 
   template<typename C>
   C& matr<C>::operator() (std::size_t i, std::size_t j) {
-    return data[j + 4 * i];
+    return data[i + 4 * j];
   }
 
 
@@ -70,7 +70,7 @@ namespace igr {
 
   template<typename C>
   void matr<C>::gl_load (GLenum matrix) {
-    /* TO-DO */
+    glGetDoublev(matrix, data.data());
   }
 
   template<typename C>
