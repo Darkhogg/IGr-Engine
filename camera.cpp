@@ -46,8 +46,11 @@ void igr::camera::yaw (double ang) {
 }
 
 void igr::camera::pitch (double ang) {
+  vec<double> vup = up;
+  vup.normalize();
+
   //normalize();
-  auto rot = matr<double>::make_rotation((look - eye).cross({0.0, 1.0, 0.0}), ang);
+  auto rot = matr<double>::make_rotation((look - eye).cross(vup), ang);
 
   auto dir = look - eye;
   dir = rot * dir;

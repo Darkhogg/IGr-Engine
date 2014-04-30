@@ -63,6 +63,8 @@ void igr::mesh::gl_draw_normals () const {
 
 
 igr::mesh igr::mesh::make_aligned_box (color_t col) {
+  #define BOXDIV 6
+
   point_t v1 { -0.5f, -0.5f, -0.5f };
   point_t v2 { +0.5f, +0.5f, +0.5f };
 
@@ -84,53 +86,97 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   box.add_face(2, 3, 6);   box.add_face(6, 3, 7);
   box.add_face(5, 4, 6);   box.add_face(5, 6, 7);*/
 
-  /* Bottom */
-  box.add_vertex({v1.x, v1.y, v1.z}, {0.f, -1.f, 0.f}, col, {});
-  box.add_vertex({v1.x, v1.y, v2.z}, {0.f, -1.f, 0.f}, col, {});
-  box.add_vertex({v2.x, v1.y, v1.z}, {0.f, -1.f, 0.f}, col, {});
-  box.add_vertex({v2.x, v1.y, v2.z}, {0.f, -1.f, 0.f}, col, {});
+  std::size_t k = 0;
 
-  box.add_face(0, 1, 2);   box.add_face(1, 3, 2);
+  /* Bottom */
+  for (std::size_t i = 0; i < BOXDIV; ++i) {
+    for (std::size_t j = 0; j < BOXDIV; ++j) {
+      double step = (1.0 / (double) BOXDIV);
+
+      box.add_vertex({v1.x + step * i,     v1.y, v1.z + step * j},     {0.f, -1.f, 0.f}, col, {});
+      box.add_vertex({v1.x + step * i,     v1.y, v1.z + step * (j+1)}, {0.f, -1.f, 0.f}, col, {});
+      box.add_vertex({v1.x + step * (i+1), v1.y, v1.z + step * j},     {0.f, -1.f, 0.f}, col, {});
+      box.add_vertex({v1.x + step * (i+1), v1.y, v1.z + step * (j+1)}, {0.f, -1.f, 0.f}, col, {});
+
+      box.add_face(k, k + 1, k + 2);   box.add_face(k + 1, k + 3, k + 2);
+      k += 4;
+    }
+  }
 
   /* Top */
-  box.add_vertex({v1.x, v2.y, v1.z}, {0.f, +1.f, 0.f}, col, {});
-  box.add_vertex({v1.x, v2.y, v2.z}, {0.f, +1.f, 0.f}, col, {});
-  box.add_vertex({v2.x, v2.y, v1.z}, {0.f, +1.f, 0.f}, col, {});
-  box.add_vertex({v2.x, v2.y, v2.z}, {0.f, +1.f, 0.f}, col, {});
+  for (std::size_t i = 0; i < BOXDIV; ++i) {
+    for (std::size_t j = 0; j < BOXDIV; ++j) {
+      double step = (1.0 / (double) BOXDIV);
 
-  box.add_face(4, 6, 5);   box.add_face(5, 6, 7);
+      box.add_vertex({v1.x + step * i,     v2.y, v1.z + step * j},     {0.f, +1.f, 0.f}, col, {});
+      box.add_vertex({v1.x + step * i,     v2.y, v1.z + step * (j+1)}, {0.f, +1.f, 0.f}, col, {});
+      box.add_vertex({v1.x + step * (i+1), v2.y, v1.z + step * j},     {0.f, +1.f, 0.f}, col, {});
+      box.add_vertex({v1.x + step * (i+1), v2.y, v1.z + step * (j+1)}, {0.f, +1.f, 0.f}, col, {});
+
+      box.add_face(k, k + 2, k + 1);   box.add_face(k + 1, k + 2, k + 3);
+      k += 4;
+    }
+  }
 
   /* Left */
-  box.add_vertex({v1.x, v1.y, v1.z}, {-1.f, 0.f, 0.f}, col, {});
-  box.add_vertex({v1.x, v1.y, v2.z}, {-1.f, 0.f, 0.f}, col, {});
-  box.add_vertex({v1.x, v2.y, v1.z}, {-1.f, 0.f, 0.f}, col, {});
-  box.add_vertex({v1.x, v2.y, v2.z}, {-1.f, 0.f, 0.f}, col, {});
+  for (std::size_t i = 0; i < BOXDIV; ++i) {
+    for (std::size_t j = 0; j < BOXDIV; ++j) {
+      double step = (1.0 / (double) BOXDIV);
 
-  box.add_face(8, 10, 9);   box.add_face(9, 10, 11);
+      box.add_vertex({v1.x, v1.y + step * i,     v1.z + step * j},     {-1.f, 0.f, 0.f}, col, {});
+      box.add_vertex({v1.x, v1.y + step * i,     v1.z + step * (j+1)}, {-1.f, 0.f, 0.f}, col, {});
+      box.add_vertex({v1.x, v1.y + step * (i+1), v1.z + step * j},     {-1.f, 0.f, 0.f}, col, {});
+      box.add_vertex({v1.x, v1.y + step * (i+1), v1.z + step * (j+1)}, {-1.f, 0.f, 0.f}, col, {});
+
+      box.add_face(k, k + 2, k + 1);   box.add_face(k + 1, k + 2, k + 3);
+      k += 4;
+    }
+  }
 
   /* Right */
-  box.add_vertex({v2.x, v1.y, v1.z}, {+1.f, 0.f, 0.f}, col, {});
-  box.add_vertex({v2.x, v1.y, v2.z}, {+1.f, 0.f, 0.f}, col, {});
-  box.add_vertex({v2.x, v2.y, v1.z}, {+1.f, 0.f, 0.f}, col, {});
-  box.add_vertex({v2.x, v2.y, v2.z}, {+1.f, 0.f, 0.f}, col, {});
+  for (std::size_t i = 0; i < BOXDIV; ++i) {
+    for (std::size_t j = 0; j < BOXDIV; ++j) {
+      double step = (1.0 / (double) BOXDIV);
 
-  box.add_face(12, 13, 14);   box.add_face(13, 15, 14);
+      box.add_vertex({v2.x, v1.y + step * i,     v1.z + step * j},     {+1.f, 0.f, 0.f}, col, {});
+      box.add_vertex({v2.x, v1.y + step * i,     v1.z + step * (j+1)}, {+1.f, 0.f, 0.f}, col, {});
+      box.add_vertex({v2.x, v1.y + step * (i+1), v1.z + step * j},     {+1.f, 0.f, 0.f}, col, {});
+      box.add_vertex({v2.x, v1.y + step * (i+1), v1.z + step * (j+1)}, {+1.f, 0.f, 0.f}, col, {});
+
+      box.add_face(k, k + 1, k + 2);   box.add_face(k + 1, k + 3, k + 2);
+      k += 4;
+    }
+  }
 
   /* Near */
-  box.add_vertex({v1.x, v1.y, v1.z}, {0.f, 0.f, -1.f}, col, {});
-  box.add_vertex({v1.x, v2.y, v1.z}, {0.f, 0.f, -1.f}, col, {});
-  box.add_vertex({v2.x, v1.y, v1.z}, {0.f, 0.f, -1.f}, col, {});
-  box.add_vertex({v2.x, v2.y, v1.z}, {0.f, 0.f, -1.f}, col, {});
+  for (std::size_t i = 0; i < BOXDIV; ++i) {
+    for (std::size_t j = 0; j < BOXDIV; ++j) {
+      double step = (1.0 / (double) BOXDIV);
 
-  box.add_face(16, 18, 17);   box.add_face(17, 18, 19);
+      box.add_vertex({v1.x + step * i,     v1.y + step * j,     v1.z}, {0.f, 0.f, -1.f}, col, {});
+      box.add_vertex({v1.x + step * i,     v1.y + step * (j+1), v1.z}, {0.f, 0.f, -1.f}, col, {});
+      box.add_vertex({v1.x + step * (i+1), v1.y + step * j,     v1.z}, {0.f, 0.f, -1.f}, col, {});
+      box.add_vertex({v1.x + step * (i+1), v1.y + step * (j+1), v1.z}, {0.f, 0.f, -1.f}, col, {});
+
+      box.add_face(k, k + 2, k + 1);   box.add_face(k + 1, k + 2, k + 3);
+      k += 4;
+    }
+  }
 
   /* Far */
-  box.add_vertex({v1.x, v1.y, v2.z}, {0.f, 0.f, +1.f}, col, {});
-  box.add_vertex({v1.x, v2.y, v2.z}, {0.f, 0.f, +1.f}, col, {});
-  box.add_vertex({v2.x, v1.y, v2.z}, {0.f, 0.f, +1.f}, col, {});
-  box.add_vertex({v2.x, v2.y, v2.z}, {0.f, 0.f, +1.f}, col, {});
+  for (std::size_t i = 0; i < BOXDIV; ++i) {
+    for (std::size_t j = 0; j < BOXDIV; ++j) {
+      double step = (1.0 / (double) BOXDIV);
 
-  box.add_face(20, 21, 22);   box.add_face(21, 23, 22);
+      box.add_vertex({v1.x + step * i,     v1.y + step * j,     v2.z}, {0.f, 0.f, +1.f}, col, {});
+      box.add_vertex({v1.x + step * i,     v1.y + step * (j+1), v2.z}, {0.f, 0.f, +1.f}, col, {});
+      box.add_vertex({v1.x + step * (i+1), v1.y + step * j,     v2.z}, {0.f, 0.f, +1.f}, col, {});
+      box.add_vertex({v1.x + step * (i+1), v1.y + step * (j+1), v2.z}, {0.f, 0.f, +1.f}, col, {});
+
+      box.add_face(k, k + 1, k + 2);   box.add_face(k + 1, k + 3, k + 2);
+      k += 4;
+    }
+  }
 
 
 
