@@ -7,7 +7,7 @@
 # or implied, including, without limitation, the warranties of
 # merchantability and of fitness for any purpose. The user must assume the
 # entire risk of using the Software.
-CC     = g++ -std=c++11 -pedantic
+CC     = g++ -std=c++11 -fdiagnostics-color -pedantic
 
 CCACHE_EXISTS := $(shell ccache -V)
 ifdef CCACHE_EXISTS
