@@ -28,7 +28,7 @@ namespace igr {
 
     public:
       vec ();
-      vec (C x, C y, C z, igr::category w);
+      vec (C x, C y, C z, igr::category w = igr::category::vector);
 
       C squared_length () const;
       C length () const;
@@ -62,7 +62,7 @@ namespace igr {
   {}
 
   template <typename C>
-  vec<C>::vec (C x, C y, C z, igr::category w = igr::category::vector)
+  vec<C>::vec (C x, C y, C z, igr::category w)
     : x(x), y(y), z(z), w((C) w)
   {
     if (w == igr::category::unknown) {

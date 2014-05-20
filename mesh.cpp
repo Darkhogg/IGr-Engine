@@ -62,9 +62,7 @@ void igr::mesh::gl_draw_normals () const {
 }
 
 
-igr::mesh igr::mesh::make_aligned_box (color_t col) {
-  #define BOXDIV 6
-
+igr::mesh igr::mesh::make_aligned_box (color_t col, std::size_t divs) {
   point_t v1 { -0.5f, -0.5f, -0.5f };
   point_t v2 { +0.5f, +0.5f, +0.5f };
 
@@ -89,9 +87,9 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   std::size_t k = 0;
 
   /* Bottom */
-  for (std::size_t i = 0; i < BOXDIV; ++i) {
-    for (std::size_t j = 0; j < BOXDIV; ++j) {
-      double step = (1.0 / (double) BOXDIV);
+  for (std::size_t i = 0; i < divs; ++i) {
+    for (std::size_t j = 0; j < divs; ++j) {
+      double step = (1.0 / (double) divs);
 
       box.add_vertex({v1.x + step * i,     v1.y, v1.z + step * j},     {0.f, -1.f, 0.f}, col, {});
       box.add_vertex({v1.x + step * i,     v1.y, v1.z + step * (j+1)}, {0.f, -1.f, 0.f}, col, {});
@@ -104,9 +102,9 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   }
 
   /* Top */
-  for (std::size_t i = 0; i < BOXDIV; ++i) {
-    for (std::size_t j = 0; j < BOXDIV; ++j) {
-      double step = (1.0 / (double) BOXDIV);
+  for (std::size_t i = 0; i < divs; ++i) {
+    for (std::size_t j = 0; j < divs; ++j) {
+      double step = (1.0 / (double) divs);
 
       box.add_vertex({v1.x + step * i,     v2.y, v1.z + step * j},     {0.f, +1.f, 0.f}, col, {});
       box.add_vertex({v1.x + step * i,     v2.y, v1.z + step * (j+1)}, {0.f, +1.f, 0.f}, col, {});
@@ -119,9 +117,9 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   }
 
   /* Left */
-  for (std::size_t i = 0; i < BOXDIV; ++i) {
-    for (std::size_t j = 0; j < BOXDIV; ++j) {
-      double step = (1.0 / (double) BOXDIV);
+  for (std::size_t i = 0; i < divs; ++i) {
+    for (std::size_t j = 0; j < divs; ++j) {
+      double step = (1.0 / (double) divs);
 
       box.add_vertex({v1.x, v1.y + step * i,     v1.z + step * j},     {-1.f, 0.f, 0.f}, col, {});
       box.add_vertex({v1.x, v1.y + step * i,     v1.z + step * (j+1)}, {-1.f, 0.f, 0.f}, col, {});
@@ -134,9 +132,9 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   }
 
   /* Right */
-  for (std::size_t i = 0; i < BOXDIV; ++i) {
-    for (std::size_t j = 0; j < BOXDIV; ++j) {
-      double step = (1.0 / (double) BOXDIV);
+  for (std::size_t i = 0; i < divs; ++i) {
+    for (std::size_t j = 0; j < divs; ++j) {
+      double step = (1.0 / (double) divs);
 
       box.add_vertex({v2.x, v1.y + step * i,     v1.z + step * j},     {+1.f, 0.f, 0.f}, col, {});
       box.add_vertex({v2.x, v1.y + step * i,     v1.z + step * (j+1)}, {+1.f, 0.f, 0.f}, col, {});
@@ -149,9 +147,9 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   }
 
   /* Near */
-  for (std::size_t i = 0; i < BOXDIV; ++i) {
-    for (std::size_t j = 0; j < BOXDIV; ++j) {
-      double step = (1.0 / (double) BOXDIV);
+  for (std::size_t i = 0; i < divs; ++i) {
+    for (std::size_t j = 0; j < divs; ++j) {
+      double step = (1.0 / (double) divs);
 
       box.add_vertex({v1.x + step * i,     v1.y + step * j,     v1.z}, {0.f, 0.f, -1.f}, col, {});
       box.add_vertex({v1.x + step * i,     v1.y + step * (j+1), v1.z}, {0.f, 0.f, -1.f}, col, {});
@@ -164,9 +162,9 @@ igr::mesh igr::mesh::make_aligned_box (color_t col) {
   }
 
   /* Far */
-  for (std::size_t i = 0; i < BOXDIV; ++i) {
-    for (std::size_t j = 0; j < BOXDIV; ++j) {
-      double step = (1.0 / (double) BOXDIV);
+  for (std::size_t i = 0; i < divs; ++i) {
+    for (std::size_t j = 0; j < divs; ++j) {
+      double step = (1.0 / (double) divs);
 
       box.add_vertex({v1.x + step * i,     v1.y + step * j,     v2.z}, {0.f, 0.f, +1.f}, col, {});
       box.add_vertex({v1.x + step * i,     v1.y + step * (j+1), v2.z}, {0.f, 0.f, +1.f}, col, {});

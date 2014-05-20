@@ -57,7 +57,8 @@ namespace igr {
 
       void gl_draw_normals() const;
 
-      static mesh make_aligned_box (color_t col);
+      static mesh make_aligned_box (color_t col) { return make_aligned_box(col, 8); }
+      static mesh make_aligned_box (color_t col, std::size_t divs);
       static mesh make_aligned_cylinder (color_t col, std::size_t sides);
       static mesh make_aligned_sphere (color_t col, std::size_t meridians, std::size_t parallels);
 
