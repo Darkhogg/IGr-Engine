@@ -22,7 +22,6 @@ void igr::mesh::add_face (index_t idx1, index_t idx2, index_t idx3) {
 }
 
 
-
 void igr::mesh::transform (matrix_t matr) {
   for (std::size_t i = 0; i < vertices.size(); ++i) {
     vertex_t v = vertices[i];
@@ -40,11 +39,13 @@ igr::mesh igr::mesh::transformed (matrix_t matr) const {
 
 
 void igr::mesh::gl_draw_immediate () const {
+  sf::Texture::bind(texture.get());
   glBegin(GL_TRIANGLES);
   for (auto idx : indices) {
     auto vx = vertices[idx];
     glColor4f(vx.color.red, vx.color.green, vx.color.blue, vx.color.alpha);
     glNormal3f(vx.normal.x, vx.normal.y, vx.normal.z);
+    glTexCoord2f(vx.texcoord.x, vx.texcoord.y);
     glVertex3f(vx.point.x, vx.point.y, vx.point.z);
   }
   glEnd();
@@ -61,6 +62,31 @@ void igr::mesh::gl_draw_normals () const {
   glEnd();
 }
 
+
+
+igr::mesh igr::mesh::make_aligned_box (std::string file) {
+  return make_aligned_box(file, 16);
+}
+
+igr::mesh igr::mesh::make_aligned_box (std::string file, std::size_t divs) {
+  auto m = make_aligned_box(color{0.3f, 0.3f, 0.3f}, divs);
+
+  std::cout << "- Loading '" << file << "' texture..." << std::endl;
+  m.texture = std::make_shared<sf::Texture>();
+  m.texture->loadFromFile(file);
+  m.texture->setSmooth(true);
+
+  sf::Texture::bind(m.texture.get());
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
+
+  return m;
+}
+
+igr::mesh igr::mesh::make_aligned_box (color_t col) {
+  return make_aligned_box(col, 16);
+}
 
 igr::mesh igr::mesh::make_aligned_box (color_t col, std::size_t divs) {
   point_t v1 { -0.5f, -0.5f, -0.5f };
@@ -85,16 +111,15 @@ igr::mesh igr::mesh::make_aligned_box (color_t col, std::size_t divs) {
   box.add_face(5, 4, 6);   box.add_face(5, 6, 7);*/
 
   std::size_t k = 0;
+  double step = (1.0 / (double) divs);
 
   /* Bottom */
   for (std::size_t i = 0; i < divs; ++i) {
     for (std::size_t j = 0; j < divs; ++j) {
-      double step = (1.0 / (double) divs);
-
-      box.add_vertex({v1.x + step * i,     v1.y, v1.z + step * j},     {0.f, -1.f, 0.f}, col, {});
-      box.add_vertex({v1.x + step * i,     v1.y, v1.z + step * (j+1)}, {0.f, -1.f, 0.f}, col, {});
-      box.add_vertex({v1.x + step * (i+1), v1.y, v1.z + step * j},     {0.f, -1.f, 0.f}, col, {});
-      box.add_vertex({v1.x + step * (i+1), v1.y, v1.z + step * (j+1)}, {0.f, -1.f, 0.f}, col, {});
+      box.add_vertex({v1.x + step * i,     v1.y, v1.z + step * j},     {0.f, -1.f, 0.f}, col, {step * i, step * j, 0});
+      box.add_vertex({v1.x + step * i,     v1.y, v1.z + step * (j+1)}, {0.f, -1.f, 0.f}, col, {step * i, step * (j+1), 0});
+      box.add_vertex({v1.x + step * (i+1), v1.y, v1.z + step * j},     {0.f, -1.f, 0.f}, col, {step * (i+1), step * j, 0});
+      box.add_vertex({v1.x + step * (i+1), v1.y, v1.z + step * (j+1)}, {0.f, -1.f, 0.f}, col, {step * (i+1), step * (j+1), 0});
 
       box.add_face(k, k + 1, k + 2);   box.add_face(k + 1, k + 3, k + 2);
       k += 4;
@@ -104,12 +129,10 @@ igr::mesh igr::mesh::make_aligned_box (color_t col, std::size_t divs) {
   /* Top */
   for (std::size_t i = 0; i < divs; ++i) {
     for (std::size_t j = 0; j < divs; ++j) {
-      double step = (1.0 / (double) divs);
-
-      box.add_vertex({v1.x + step * i,     v2.y, v1.z + step * j},     {0.f, +1.f, 0.f}, col, {});
-      box.add_vertex({v1.x + step * i,     v2.y, v1.z + step * (j+1)}, {0.f, +1.f, 0.f}, col, {});
-      box.add_vertex({v1.x + step * (i+1), v2.y, v1.z + step * j},     {0.f, +1.f, 0.f}, col, {});
-      box.add_vertex({v1.x + step * (i+1), v2.y, v1.z + step * (j+1)}, {0.f, +1.f, 0.f}, col, {});
+      box.add_vertex({v1.x + step * i,     v2.y, v1.z + step * j},     {0.f, +1.f, 0.f}, col, {step * i, step * j, 0});
+      box.add_vertex({v1.x + step * i,     v2.y, v1.z + step * (j+1)}, {0.f, +1.f, 0.f}, col, {step * i, step * (j+1), 0});
+      box.add_vertex({v1.x + step * (i+1), v2.y, v1.z + step * j},     {0.f, +1.f, 0.f}, col, {step * (i+1), step * j, 0});
+      box.add_vertex({v1.x + step * (i+1), v2.y, v1.z + step * (j+1)}, {0.f, +1.f, 0.f}, col, {step * (i+1), step * (j+1), 0});
 
       box.add_face(k, k + 2, k + 1);   box.add_face(k + 1, k + 2, k + 3);
       k += 4;
@@ -119,12 +142,10 @@ igr::mesh igr::mesh::make_aligned_box (color_t col, std::size_t divs) {
   /* Left */
   for (std::size_t i = 0; i < divs; ++i) {
     for (std::size_t j = 0; j < divs; ++j) {
-      double step = (1.0 / (double) divs);
-
-      box.add_vertex({v1.x, v1.y + step * i,     v1.z + step * j},     {-1.f, 0.f, 0.f}, col, {});
-      box.add_vertex({v1.x, v1.y + step * i,     v1.z + step * (j+1)}, {-1.f, 0.f, 0.f}, col, {});
-      box.add_vertex({v1.x, v1.y + step * (i+1), v1.z + step * j},     {-1.f, 0.f, 0.f}, col, {});
-      box.add_vertex({v1.x, v1.y + step * (i+1), v1.z + step * (j+1)}, {-1.f, 0.f, 0.f}, col, {});
+      box.add_vertex({v1.x, v1.y + step * i,     v1.z + step * j},     {-1.f, 0.f, 0.f}, col, {step * i, step * j, 0});
+      box.add_vertex({v1.x, v1.y + step * i,     v1.z + step * (j+1)}, {-1.f, 0.f, 0.f}, col, {step * i, step * (j+1), 0});
+      box.add_vertex({v1.x, v1.y + step * (i+1), v1.z + step * j},     {-1.f, 0.f, 0.f}, col, {step * (i+1), step * j, 0});
+      box.add_vertex({v1.x, v1.y + step * (i+1), v1.z + step * (j+1)}, {-1.f, 0.f, 0.f}, col, {step * (i+1), step * (j+1), 0});
 
       box.add_face(k, k + 2, k + 1);   box.add_face(k + 1, k + 2, k + 3);
       k += 4;
@@ -134,12 +155,10 @@ igr::mesh igr::mesh::make_aligned_box (color_t col, std::size_t divs) {
   /* Right */
   for (std::size_t i = 0; i < divs; ++i) {
     for (std::size_t j = 0; j < divs; ++j) {
-      double step = (1.0 / (double) divs);
-
-      box.add_vertex({v2.x, v1.y + step * i,     v1.z + step * j},     {+1.f, 0.f, 0.f}, col, {});
-      box.add_vertex({v2.x, v1.y + step * i,     v1.z + step * (j+1)}, {+1.f, 0.f, 0.f}, col, {});
-      box.add_vertex({v2.x, v1.y + step * (i+1), v1.z + step * j},     {+1.f, 0.f, 0.f}, col, {});
-      box.add_vertex({v2.x, v1.y + step * (i+1), v1.z + step * (j+1)}, {+1.f, 0.f, 0.f}, col, {});
+      box.add_vertex({v2.x, v1.y + step * i,     v1.z + step * j},     {+1.f, 0.f, 0.f}, col, {step * i, step * j, 0});
+      box.add_vertex({v2.x, v1.y + step * i,     v1.z + step * (j+1)}, {+1.f, 0.f, 0.f}, col, {step * i, step * (j+1), 0});
+      box.add_vertex({v2.x, v1.y + step * (i+1), v1.z + step * j},     {+1.f, 0.f, 0.f}, col, {step * (i+1), step * j, 0});
+      box.add_vertex({v2.x, v1.y + step * (i+1), v1.z + step * (j+1)}, {+1.f, 0.f, 0.f}, col, {step * (i+1), step * (j+1), 0});
 
       box.add_face(k, k + 1, k + 2);   box.add_face(k + 1, k + 3, k + 2);
       k += 4;
@@ -149,12 +168,10 @@ igr::mesh igr::mesh::make_aligned_box (color_t col, std::size_t divs) {
   /* Near */
   for (std::size_t i = 0; i < divs; ++i) {
     for (std::size_t j = 0; j < divs; ++j) {
-      double step = (1.0 / (double) divs);
-
-      box.add_vertex({v1.x + step * i,     v1.y + step * j,     v1.z}, {0.f, 0.f, -1.f}, col, {});
-      box.add_vertex({v1.x + step * i,     v1.y + step * (j+1), v1.z}, {0.f, 0.f, -1.f}, col, {});
-      box.add_vertex({v1.x + step * (i+1), v1.y + step * j,     v1.z}, {0.f, 0.f, -1.f}, col, {});
-      box.add_vertex({v1.x + step * (i+1), v1.y + step * (j+1), v1.z}, {0.f, 0.f, -1.f}, col, {});
+      box.add_vertex({v1.x + step * i,     v1.y + step * j,     v1.z}, {0.f, 0.f, -1.f}, col, {step * i, step * j, 0});
+      box.add_vertex({v1.x + step * i,     v1.y + step * (j+1), v1.z}, {0.f, 0.f, -1.f}, col, {step * i, step * (j+1), 0});
+      box.add_vertex({v1.x + step * (i+1), v1.y + step * j,     v1.z}, {0.f, 0.f, -1.f}, col, {step * (i+1), step * j, 0});
+      box.add_vertex({v1.x + step * (i+1), v1.y + step * (j+1), v1.z}, {0.f, 0.f, -1.f}, col, {step * (i+1), step * (j+1), 0});
 
       box.add_face(k, k + 2, k + 1);   box.add_face(k + 1, k + 2, k + 3);
       k += 4;
@@ -164,12 +181,10 @@ igr::mesh igr::mesh::make_aligned_box (color_t col, std::size_t divs) {
   /* Far */
   for (std::size_t i = 0; i < divs; ++i) {
     for (std::size_t j = 0; j < divs; ++j) {
-      double step = (1.0 / (double) divs);
-
-      box.add_vertex({v1.x + step * i,     v1.y + step * j,     v2.z}, {0.f, 0.f, +1.f}, col, {});
-      box.add_vertex({v1.x + step * i,     v1.y + step * (j+1), v2.z}, {0.f, 0.f, +1.f}, col, {});
-      box.add_vertex({v1.x + step * (i+1), v1.y + step * j,     v2.z}, {0.f, 0.f, +1.f}, col, {});
-      box.add_vertex({v1.x + step * (i+1), v1.y + step * (j+1), v2.z}, {0.f, 0.f, +1.f}, col, {});
+      box.add_vertex({v1.x + step * i,     v1.y + step * j,     v2.z}, {0.f, 0.f, +1.f}, col, {step * i, step * j, 0});
+      box.add_vertex({v1.x + step * i,     v1.y + step * (j+1), v2.z}, {0.f, 0.f, +1.f}, col, {step * i, step * (j+1), 0});
+      box.add_vertex({v1.x + step * (i+1), v1.y + step * j,     v2.z}, {0.f, 0.f, +1.f}, col, {step * (i+1), step * j, 0});
+      box.add_vertex({v1.x + step * (i+1), v1.y + step * (j+1), v2.z}, {0.f, 0.f, +1.f}, col, {step * (i+1), step * (j+1), 0});
 
       box.add_face(k, k + 1, k + 2);   box.add_face(k + 1, k + 3, k + 2);
       k += 4;

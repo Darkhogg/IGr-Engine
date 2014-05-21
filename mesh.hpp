@@ -11,6 +11,7 @@
 #include <vector>
 #include <tuple>
 #include <ostream>
+#include <memory>
 
 namespace igr {
 
@@ -23,6 +24,7 @@ namespace igr {
       using texcoord_t = vec<double>;
       using index_t    = std::size_t;
       using matrix_t   = matr<double>;
+      using texture_t  = std::shared_ptr<sf::Texture>;
 
       /* Description of a vertex */
       struct vertex_t {
@@ -39,6 +41,7 @@ namespace igr {
     public:
       std::vector<vertex_t> vertices;
       std::vector<index_t>  indices;
+      texture_t             texture;
 
     public:
       mesh () {}
@@ -57,8 +60,10 @@ namespace igr {
 
       void gl_draw_normals() const;
 
-      static mesh make_aligned_box (color_t col) { return make_aligned_box(col, 8); }
+      static mesh make_aligned_box (color_t col);
       static mesh make_aligned_box (color_t col, std::size_t divs);
+      static mesh make_aligned_box (std::string tex);
+      static mesh make_aligned_box (std::string tex, std::size_t divs);
       static mesh make_aligned_cylinder (color_t col, std::size_t sides);
       static mesh make_aligned_sphere (color_t col, std::size_t meridians, std::size_t parallels);
 
